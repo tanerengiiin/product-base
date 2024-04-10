@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { GeistSans } from 'geist/font/sans';
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import SidebarLayout from "@/components/SidebarLayout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -11,12 +10,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  auth
 }: Readonly<{
   children: React.ReactNode;
+  auth: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={GeistSans.className}>
+        <SidebarLayout>
+          {children}
+          {auth}
+        </SidebarLayout>
+      </body>
     </html>
   );
 }
