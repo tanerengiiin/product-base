@@ -54,15 +54,15 @@ const BlogsCreate = () => {
     };
 
     return (
-        <div className="relative py-10 w-[660px] mx-auto">
-            <div className='z-20 flex items-center justify-between bg-background sticky top-0 py-4'>
+        <div className="relative py-2 lg:py-10 max-w-[660px] w-full mx-auto">
+            <div className='z-20 flex items-center justify-between bg-background sticky top-0 py-3 lg:py-4'>
                 <h2 className='text-xl font-semibold text-primary'>Create a blog</h2>
                 <button className='text-mainly rounded-full px-3 py-1 border border-mainly bg-mainly/5 hover:bg-mainly/10 transition-all active:scale-95 font-medium'>Publish</button>
             </div>
             <AspectRatio ratio={600 / 300} className="bg-muted rounded-xl border mt-2">
                 {selectedImage ?
                     <div className='w-full h-full relative'>
-                        <button onClick={() => setSelectedImage('')} className='absolute z-20 top-4 right-4 w-8 h-8 bg-white/75 hover:bg-white transition-all text-black/75 rounded-full flex items-center justify-center'>
+                        <button onClick={() => setSelectedImage('')} className='absolute z-20 top-2 lg:top-4 right-2 lg:right-4 w-8 h-8 bg-white/75 hover:bg-white transition-all text-black/75 rounded-full flex items-center justify-center'>
                             <X size={18} weight='bold' />
                         </button>
                         <Image
@@ -75,7 +75,7 @@ const BlogsCreate = () => {
                     : <div
                         onDragOver={handleDragOver}
                         onDrop={handleDrop}
-                        className='rounded-xl w-full h-full bg-secondary flex flex-col items-center justify-center gap-3'>
+                        className='rounded-xl w-full h-full bg-secondary flex flex-col items-center justify-center gap-2 lg:gap-3'>
                         <input
                             type="file"
                             accept="image/*"
@@ -83,14 +83,14 @@ const BlogsCreate = () => {
                             ref={fileInputRef}
                             onChange={handleFileInputChange}
                         />
-                        <CloudArrowUp size={48} weight='thin' className='text-primary opacity-80' />
-                        <div className='text-lg text-primary/75 font-medium'>Drag & Drop Image</div>
-                        <div className='flex items-center gap-2 w-1/4'>
+                        <CloudArrowUp size={36} weight='thin' className='text-primary opacity-80' />
+                        <div className='text-base lg:text-lg text-primary/75 font-medium'>Drag & Drop Image</div>
+                        <div className='flex items-center gap-2 w-1/2 lg:w-1/4'>
                             <div className='h-[1px] flex-1 bg-primary/10'></div>
                             <div className='text-sm text-primary/50 font-medium'>or</div>
                             <div className='h-[1px] flex-1 bg-primary/10'></div>
                         </div>
-                        <button onClick={handleButtonClick} className='bg-background border-primary/10 border px-2 py-1 rounded-lg hover:bg-primary/5 transition-all active:scale-95'>Upload Image</button>
+                        <button onClick={handleButtonClick} className='bg-background lg:text-base text-sm border-primary/10 border px-2 py-1 rounded-lg hover:bg-primary/5 transition-all active:scale-95'>Upload Image</button>
                     </div>
                 }
             </AspectRatio>

@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const LoginModal = () => {
     return (
-        <div className='rounded-2xl card-shadow p-10 bg-background w-[400px]'>
+        <div className='rounded-2xl card-shadow py-8 px-6 lg:p-10 bg-background max-w-[400px] min-w-[300px]'>
             <ProductBaseLogo />
             <div className='mt-3 mb-5 font-semibold text-primary'>Sign in to ProductBase</div>
             <div className='flex flex-col gap-3'>

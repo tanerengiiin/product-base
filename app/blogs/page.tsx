@@ -4,16 +4,16 @@ import BlogCard from '@/components/BlogCard'
 import Link from 'next/link'
 const BlogsPage = () => {
     return (
-        <div className="py-20">
-            <div className="flex items-center text-primary justify-between w-[660px] mx-auto mb-6">
+        <div className="py-10 lg:py-20 max-w-[660px] mx-auto">
+            <div className="flex items-center text-primary justify-between w-full mx-auto mb-6">
                 <h2 className="text-2xl font-semibold">Blogs</h2>
                 <Link href='/blogs/create' className="px-2 py-1 rounded-lg border border-border bg-secondary hover:bg-primary/10 transition-all active:scale-95 inline-flex items-center gap-2">
                     <PencilSimpleLine size={16} />
                     <span>Write a blog</span>
                 </Link>
             </div>
-            <div className="flex items-start gap-6 w-fit mx-auto">
-                <div className="flex flex-col gap-6">
+            <div className="flex sm:flex-row flex-col items-start  gap-4 lg:gap-6 w-fit mx-auto">
+                <div className="flex-1 flex flex-col gap-4 lg:gap-6">
                     <BlogCard
                         title="Blog posts by Ryan Mulligan"
                         description="Blogging my general thoughts and rambles, code snippets, and front-end web dev discoveries"
@@ -27,7 +27,7 @@ const BlogsPage = () => {
                         src="/images/sodz.png"
                     />
                 </div>
-                <div className="flex flex-col gap-6">
+                <div className="flex-1 flex flex-col gap-4 lg:gap-6">
                     <BlogCard
                         title="Aceternity UI"
                         description="Beautiful Tailwind CSS and Framer Motion Components, built with Next.js and TypeScript."

@@ -4,6 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link';
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { AspectRatio } from './ui/aspect-ratio';
+import { cn } from '@/lib/utils';
 
 interface Props {
     src: string;
@@ -17,9 +19,16 @@ interface Props {
 const ProductCard = (props: Props) => {
     const { src, title, description, owner, children, className } = props;
     return (
-        <div className={'w-[318px] p-4 card-shadow rounded-xl bg-background hover:bg-secondary/50 transition-all ' + className}>
-            <div className="w-full h-[150px] mb-4">
-                <Image width={0} height={0} loading='lazy' className="w-full h-full object-cover rounded-lg border border-border" sizes="100vw" src={src} alt="Product Image" />
+        <div className={cn('w-full p-4 card-shadow rounded-xl bg-background hover:bg-secondary/50 transition-all ', className)}>
+            <div className="w-full mb-4">
+                <AspectRatio ratio={286 / 150}>
+                    <Image
+                        src={src}
+                        alt="Blog Image"
+                        fill
+                        className="object-cover rounded-lg border border-border"
+                    />
+                </AspectRatio>
             </div>
             <div className="flex flex-col gap-1 mt-4 text-primary">
                 <Link href={''} className="text-sm flex items-center gap-2 leading-tight hover:underline cursor-pointer">

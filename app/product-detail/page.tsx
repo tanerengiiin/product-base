@@ -39,7 +39,7 @@ const ProductDetail = () => {
     const [thoughts, setThoughts] = useState('');
     const [selectedImage, setSelectedImage] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
-
+    const tabsRef = useRef<HTMLDivElement>(null);
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
 
@@ -54,8 +54,13 @@ const ProductDetail = () => {
             reader.readAsDataURL(file);
         }
     };
+
+    const handleTabClick = (id: string) => {
+        setActiveTab(id);
+        tabsRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
     return (
-        <div className='pb-12 px-12 flex items-start gap-9'>
+        <div className='pb-12 lg:px-12 lg:pt-0 pt-4 flex lg:flex-row flex-col items-start gap-2 lg:gap-9 max-w-[660px] mx-auto lg:max-w-full'>
             <ProductCard
                 title="Noor - Chat for teams"
                 description="The next-gen chat app for teamwork. No bloat. Fast, written in Rust."
@@ -65,7 +70,7 @@ const ProductDetail = () => {
                 upvotesNum='882'
                 reviewsNum='1.2k'
                 category='Productivity'
-                className='hover:bg-background sticky top-12'
+                className='hover:bg-background lg:sticky top-12 lg:min-w-[300px] lg:max-w-[360px]'
             >
                 <div className='border-t border-border pt-4 mt-4 flex gap-2'>
                     <button className='flex-1 bg-mainly/5 text-mainly hover:bg-mainly/10 transition-all uppercase rounded-lg border border-mainly flex items-center gap-2 justify-center active:scale-95'>
@@ -80,18 +85,20 @@ const ProductDetail = () => {
                     </button>
                 </div>
             </ProductCard>
-            <div className='flex-1 flex flex-col gap-4'>
-                <div className='sticky top-0 pt-12 bg-background z-20 flex items-center gap-2 overflow-auto pb-3 border-b'>
+            <div className='relative flex-1 flex flex-col gap-4 w-full'>
+                <div className='absolute top-0' ref={tabsRef}></div>
+                <div className='sticky top-0 pt-4 lg:pt-12 bg-background z-20 flex items-center gap-2 overflow-auto pb-3 border-b'>
                     {productDetailTabs.map((data, i) => (
                         <button key={data.id}
-                            onClick={() => setActiveTab(data.id)}
-                            className={`flex items-center gap-2 px-3 py-1.5 transition-all rounded-lg border ${activeTab === data.id ? 'bg-primary border-primary text-secondary' : 'bg-secondary text-primary hover:bg-primary/10'}`}>
+                            onClick={() => handleTabClick(data.id)}
+                            className={`flex whitespace-nowrap items-center gap-2 px-3 py-1.5 transition-all rounded-lg border ${activeTab === data.id ? 'bg-primary border-primary text-secondary' : 'bg-secondary text-primary hover:bg-primary/10'}`}>
                             <span>{data.icon}</span>
                             <span className='text-sm'>{data.title}</span>
                         </button>
                     ))}
                 </div>
-                <div className='pb-4 border-b flex items-start gap-3'>
+
+                <div className='pb-4 border-b flex items-start gap-2 lg:gap-3'>
                     <Avatar className='h-8 w-8'>
                         <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                         <AvatarFallback>CN</AvatarFallback>
@@ -99,8 +106,8 @@ const ProductDetail = () => {
                     <div className='flex-1 flex flex-col gap-3'>
                         <textarea maxLength={500} value={thoughts} onChange={(e) => setThoughts(e.target.value)} placeholder='Write your thoughts' rows={3} className='w-full outline-none text-primary placeholder:text-primary/50 resize-none pr-1'></textarea>
                         {selectedImage && <div className='group relative mt-1 w-[150px] h-[80px] border rounded-lg cursor-pointer active:scale-100 transition-all'>
-                            <button onClick={()=>setSelectedImage('')} className='opacity-0 group-hover:opacity-100 absolute top-2 right-2 w-6 h-6 bg-white/75 text-black/75 rounded-full flex items-center justify-center transition-all'>
-                                <X size={14} weight='bold'/>
+                            <button onClick={() => setSelectedImage('')} className='opacity-100 lg:opacity-0 group-hover:opacity-100 absolute top-2 right-2 w-6 h-6 bg-white/75 text-black/75 rounded-full flex items-center justify-center transition-all'>
+                                <X size={14} weight='bold' />
                             </button>
                             <Image width={0} height={0} loading='lazy' className="w-full h-full object-cover rounded-lg border border-border" sizes="100vw" src={selectedImage} alt="Product Image" />
                         </div>}
@@ -134,7 +141,7 @@ const ProductDetail = () => {
                 </div>
                 {
                     Array(5).fill(null).map((_, i) => (
-                        <div key={i} className='flex items-start gap-3'>
+                        <div key={i} className='flex items-start gap-2 lg:gap-3'>
                             <Avatar>
                                 <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                                 <AvatarFallback>CN</AvatarFallback>

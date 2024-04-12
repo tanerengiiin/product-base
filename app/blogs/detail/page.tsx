@@ -5,8 +5,8 @@ import React from 'react'
 
 const BlogsDetail = () => {
     return (
-        <div className="py-20 w-[660px] mx-auto">
-            <AspectRatio ratio={600 / 300} className="bg-muted rounded-xl border">
+        <div className="py-10 lg:py-20 max-w-[660px] w-full mx-auto">
+            <AspectRatio ratio={600 / 300} className="rounded-xl border">
                 <Image
                     src="/images/mulligan.png"
                     alt="Photo by Drew Beamer"

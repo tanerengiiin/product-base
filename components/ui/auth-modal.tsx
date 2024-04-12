@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/lib/utils"
 import { Dialog, DialogContent } from "./dialog"
 import { useRouter } from "next/navigation"
 
@@ -19,7 +18,7 @@ const AuthModal = ({
     };
     return (
         <Dialog open onOpenChange={handleOnOpenChange}>
-            <DialogContent className="w-fit p-0 bg-transparent">
+            <DialogContent className="w-fit p-0 bg-transparent border-0">
                 {children}
             </DialogContent>
         </Dialog>

@@ -3,12 +3,12 @@ import { Heart } from "@phosphor-icons/react/dist/ssr/Heart";
 
 export default function Home() {
   return (
-    <div className="py-20">
-      <div className="flex items-center text-primary justify-between w-[660px] mx-auto mb-6">
+    <div className="py-10 lg:py-20 max-w-[660px] mx-auto">
+      <div className="flex items-center text-primary justify-between w-full mx-auto mb-6">
         <h2 className="text-2xl font-semibold">Recommendations</h2>
       </div>
-      <div className="flex items-start gap-6 w-fit mx-auto">
-        <div className="flex flex-col gap-6">
+      <div className="flex sm:flex-row flex-col items-start  gap-4 lg:gap-6 w-fit mx-auto">
+        <div className="flex-1 flex flex-col gap-4 lg:gap-6 w-full">
           <ProductCard
           title="Noor - Chat for teams"
           description="The next-gen chat app for teamwork. No bloat. Fast, written in Rust."
@@ -28,7 +28,7 @@ export default function Home() {
           reviewsNum='567'
           />
         </div>
-        <div className="flex flex-col gap-6">
+        <div className="flex-1 flex flex-col gap-4 lg:gap-6 w-full">
           <ProductCard
           title="Harmony - A different kind of color picker"
           description="The next-gen chat app for teamwork. No bloat. Fast, written in Rust."

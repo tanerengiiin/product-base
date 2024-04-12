@@ -3,6 +3,8 @@ import { Star } from '@phosphor-icons/react/dist/ssr/Star'
 import Image from 'next/image'
 import Link from 'next/link';
 import React from 'react'
+import { AspectRatio } from './ui/aspect-ratio';
+import { cn } from '@/lib/utils';
 
 interface Props {
     src: string;
@@ -13,23 +15,30 @@ interface Props {
     owner: string;
     title: string;
     link: string;
-    children?:React.ReactNode;
-    className?:string;
+    children?: React.ReactNode;
+    className?: string;
 }
 
 const ProductCard = (props: Props) => {
-    const { src, title, link, reviewsNum, category, description, upvotesNum, owner , children, className} = props;
+    const { src, title, link, reviewsNum, category, description, upvotesNum, owner, children, className } = props;
     return (
-        <div className={'w-[318px] p-4 card-shadow rounded-xl bg-background hover:bg-secondary/50 transition-all '+className}>
-            <div className="w-full h-[150px] mb-4">
-                <Image width={0} height={0} loading='lazy' className="w-full h-full object-cover rounded-lg border border-border" sizes="100vw" src={src} alt="Product Image" />
+        <div className={cn('w-full p-4 card-shadow rounded-xl bg-background hover:bg-secondary/50 transition-all', className)}>
+            <div className="w-full mb-4">
+                <AspectRatio ratio={286 / 150}>
+                    <Image
+                        src={src} 
+                        alt="Product Image"
+                        fill
+                        className="object-cover rounded-lg border border-border"
+                    />
+                </AspectRatio>
             </div>
             <div className="flex flex-col gap-1 mt-4 text-primary">
                 <Link href={''} className="text-xs leading-tight hover:underline cursor-pointer">{owner}</Link>
                 <Link href='/product-detail' className="text-lg font-semibold hover:underline cursor-pointer">{title}</Link>
-                <Link href={link} target='_blank' className="group flex items-center gap-1 cursor-pointer opacity-80">
-                    <LinkSimpleHorizontal size={14} />
-                    <span className="group-hover:underline text-sm font-light leading-tight w-fit">{link.replace(/^http(s?):\/\//i, "")}</span>
+                <Link href={link} target='_blank' className="group flex items-center gap-1 cursor-pointer">
+                    <LinkSimpleHorizontal size={16} />
+                    <span className="group-hover:underline text-sm leading-tight w-fit">{link.replace(/^http(s?):\/\//i, "")}</span>
                 </Link>
                 <p className="text-sm leading-normal">{description}</p>
                 <div className="flex items-center gap-2 flex-wrap mt-1">
