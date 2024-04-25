@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from 'geist/font/sans';
 import "./globals.css";
 import SidebarLayout from "@/components/SidebarLayout";
+import NextAuthProvider from "@/components/NextAuthProvider"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -10,18 +11,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  auth
 }: Readonly<{
   children: React.ReactNode;
-  auth: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={GeistSans.className}>
-        <SidebarLayout>
-          {children}
-          {auth}
-        </SidebarLayout>
+      <body className={GeistSans.className} style={GeistSans.style}>
+        <NextAuthProvider>
+          <SidebarLayout>
+            {children}
+          </SidebarLayout>
+        </NextAuthProvider>
       </body>
     </html>
   );

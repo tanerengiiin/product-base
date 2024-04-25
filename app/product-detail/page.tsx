@@ -12,8 +12,10 @@ import { Question } from '@phosphor-icons/react/dist/ssr/Question'
 import { ShareFat } from '@phosphor-icons/react/dist/ssr/ShareFat'
 import { ThumbsUp } from '@phosphor-icons/react/dist/ssr/ThumbsUp'
 import { X } from '@phosphor-icons/react/dist/ssr/X'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useRef, useState } from 'react'
 
 const productDetailTabs = [
@@ -35,6 +37,8 @@ const productDetailTabs = [
 ];
 
 const ProductDetail = () => {
+    const router = useRouter()
+    const { data: session } = useSession();
     const [activeTab, setActiveTab] = useState('details');
     const [thoughts, setThoughts] = useState('');
     const [selectedImage, setSelectedImage] = useState('');
@@ -59,6 +63,18 @@ const ProductDetail = () => {
         setActiveTab(id);
         tabsRef.current?.scrollIntoView({ behavior: "smooth" });
     }
+
+    const handleThumbsUp = () => {
+        if (!session) {
+            router.push('/auth/login')
+        }
+    }
+    const handleBookmark = () => {
+        if (!session) {
+            router.push('/auth/login')
+        }
+    }
+
     return (
         <div className='pb-12 lg:px-12 lg:pt-0 pt-4 flex lg:flex-row flex-col items-start gap-2 lg:gap-9 max-w-[660px] mx-auto lg:max-w-full'>
             <ProductCard
@@ -73,11 +89,11 @@ const ProductDetail = () => {
                 className='hover:bg-background lg:sticky top-12 lg:min-w-[300px] lg:max-w-[360px]'
             >
                 <div className='border-t border-border pt-4 mt-4 flex gap-2'>
-                    <button className='flex-1 bg-mainly/5 text-mainly hover:bg-mainly/10 transition-all uppercase rounded-lg border border-mainly flex items-center gap-2 justify-center active:scale-95'>
+                    <button onClick={handleThumbsUp} className='flex-1 bg-mainly/5 text-mainly hover:bg-mainly/10 transition-all uppercase rounded-lg border border-mainly flex items-center gap-2 justify-center active:scale-95'>
                         <span><ThumbsUp size={16} /></span>
                         <span className='text-sm font-medium'>upvote</span>
                     </button>
-                    <button className='w-8 h-8 rounded-lg border border-border bg-secondary hover:bg-primary/10 transition-all text-primary flex items-center justify-center active:scale-95'>
+                    <button onClick={handleBookmark} className='w-8 h-8 rounded-lg border border-border bg-secondary hover:bg-primary/10 transition-all text-primary flex items-center justify-center active:scale-95'>
                         <BookmarkSimple size={16} />
                     </button>
                     <button className='w-8 h-8 rounded-lg border border-border bg-secondary hover:bg-primary/10 transition-all text-primary flex items-center justify-center active:scale-95'>
@@ -90,6 +106,7 @@ const ProductDetail = () => {
                 <div className='sticky top-0 pt-4 lg:pt-12 bg-background z-20 flex items-center gap-2 overflow-auto pb-3 border-b'>
                     {productDetailTabs.map((data, i) => (
                         <button key={data.id}
+                            disabled={i > 0}
                             onClick={() => handleTabClick(data.id)}
                             className={`flex whitespace-nowrap items-center gap-2 px-3 py-1.5 transition-all rounded-lg border ${activeTab === data.id ? 'bg-primary border-primary text-secondary' : 'bg-secondary text-primary hover:bg-primary/10'}`}>
                             <span>{data.icon}</span>
@@ -98,11 +115,19 @@ const ProductDetail = () => {
                     ))}
                 </div>
 
-                <div className='pb-4 border-b flex items-start gap-2 lg:gap-3'>
-                    <Avatar className='h-8 w-8'>
-                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                <div className='relative pb-4 border-b flex items-start gap-2 lg:gap-3'>
+                    {!session&&<div className='flex items-center justify-center opacity-0 hover:opacity-100 transition-all bg-secondary/50 absolute top-0 left-0 w-full h-full z-50'>
+                        <Link href={'/auth/login'} className='bg-primary px-4 py-1.5 rounded-lg text-secondary font-medium'>Log in</Link>
+                    </div>}
+
+                    {session ? <Avatar className='h-8 w-8'>
+                        {session.user?.image && <AvatarImage src={session.user?.image} alt="@shadcn" />}
                         <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
+                    </Avatar> :
+                        <div className='w-8 h-8 rounded-full bg-secondary'>
+
+                        </div>
+                    }
                     <div className='flex-1 flex flex-col gap-3'>
                         <textarea maxLength={500} value={thoughts} onChange={(e) => setThoughts(e.target.value)} placeholder='Write your thoughts' rows={3} className='w-full outline-none text-primary placeholder:text-primary/50 resize-none pr-1'></textarea>
                         {selectedImage && <div className='group relative mt-1 w-[150px] h-[80px] border rounded-lg cursor-pointer active:scale-100 transition-all'>
@@ -158,7 +183,7 @@ const ProductDetail = () => {
                                     </DialogTrigger>
                                     <DialogContent className="sm:max-w-[600px]">
                                         <DialogHeader>
-                                            <DialogTitle>Review by @abeltesfaye</DialogTitle>
+                                            <DialogTitle className='text-left'>Review by @abeltesfaye</DialogTitle>
                                         </DialogHeader>
                                         <AspectRatio ratio={150 / 80} className="bg-muted">
                                             <Image width={0} height={0} loading='lazy' className="w-full h-full object-cover rounded-lg border border-border" sizes="100vw" src='/images/noor.png' alt="Product Image" />
