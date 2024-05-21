@@ -3,8 +3,9 @@ const users = [
         username: 'john_doe',
         email: 'john@example.com',
         password: 'password123',
-        profilePic: 'https://randomuser.me/api/portraits/men/1.jpg',
-        fullName: 'John Doe'
+        profilePic: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpLwAZNxPs08JjFBBe9jUszDWS-MXSbroUh2CMedgrvEMpxMgEiidZsJj_iHoRIoSBvI4&usqp=CAU',
+        fullName: 'John Doe',
+        role:'merchant'
     },
     {
         username: 'alice_smith',

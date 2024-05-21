@@ -1,11 +1,10 @@
 "use client"
 import { Article } from '@phosphor-icons/react/dist/ssr/Article';
-import { ChatsTeardrop } from '@phosphor-icons/react/dist/ssr/ChatsTeardrop';
 import { House } from '@phosphor-icons/react/dist/ssr/House';
 import { Storefront } from '@phosphor-icons/react/dist/ssr/Storefront';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DotsThreeVertical } from '@phosphor-icons/react/dist/ssr/DotsThreeVertical';
 import ProductBaseLogo from './ProductBaseLogo';
@@ -29,12 +28,12 @@ import {
 } from "@/components/ui/drawer"
 import { signOut, useSession } from 'next-auth/react';
 import { Button } from './ui/button';
-import { SignOut, User } from '@phosphor-icons/react/dist/ssr';
+import { Asterisk, BookmarkSimple, Fire, SignOut, User, UserCircle } from '@phosphor-icons/react/dist/ssr';
 const sidebarNavs = [
     {
         icon: <House size={18} />,
         title: 'Home',
-        route: '/'
+        route: '/',
     },
     // {
     //     icon: <Storefront size={18} />,
@@ -51,7 +50,31 @@ const sidebarNavs = [
     //     title: 'Community',
     //     route: '/community'
     // },
-]
+];
+
+const userProfileDetailNavs = [
+    {
+        icon: <UserCircle size={18} />,
+        title: 'Profile',
+        route: (username: string) => {
+            return '/user/' + username 
+        },
+    },
+    {
+        icon: <Article size={18} />,
+        title: 'Blogs',
+        route: (username: string) => {
+            return '/user/' + username + '/?activeTab=blogs'
+        },
+    },
+    {
+        icon: <BookmarkSimple size={18} />,
+        title: 'Bookmarks',
+        route: (username: string) => {
+            return '/user/' + username + '/?activeTab=bookmarks'
+        },
+    },
+];
 
 export default function SidebarLayout({
     children,
@@ -60,12 +83,24 @@ export default function SidebarLayout({
 }>) {
     const pathname = usePathname();
     const { data: session } = useSession();
+    const [openProfileDetail, setOpenProfileDetail] = useState(false);
+    const expandedProfileDetailRef = useRef<HTMLDivElement>(null);
+    const handleClickOutside = (event: any) => {
+        if (expandedProfileDetailRef.current && !expandedProfileDetailRef.current.contains(event.target)) {
+            setOpenProfileDetail(false);
+        }
+    };
+
     useEffect(() => {
-        console.log("sess", session)
-    }, [session])
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className='lg:flex'>
-            <div className='w-[288px] h-[100dvh] bg-primary-foreground border-r border-border px-3 py-6 hidden lg:flex flex-col justify-between'>
+        <div className='lg:flex h-[100vh]'>
+            <div className='w-[288px] h-[100dvh] overflow-auto bg-primary-foreground border-r border-border px-3 py-6 hidden lg:flex flex-col justify-between'>
                 <nav className='flex flex-col gap-6 flex-1 overflow-auto'>
                     <Link href='/' className='cursor-pointer ml-1'>
                         <ProductBaseLogo />
@@ -81,35 +116,40 @@ export default function SidebarLayout({
                             </li>
                         ))}
                     </ul>
+                    <div className='w-full h-[1px] bg-border'></div>
+                    <Link href='/submit' className={`flex items-center gap-2 w-full border border-transparent hover:border-mainly/50 hover:bg-mainly/10 transition-all active:scale-95 text-mainly p-2 text-sm font-medium rounded-lg ${pathname === '/submit' ? 'border-mainly/50 bg-mainly/10' : ''}`}>
+                        <Fire size={18} weight='bold' />
+                        <span>Submit</span>
+                    </Link>
                 </nav>
                 {session ?
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <div className='select-none flex items-center justify-between cursor-pointer p-2 rounded-lg active:scale-95 hover:bg-primary/5 transition-all border border-transparent hover:border-border'>
-                                <div className='flex items-center gap-2'>
-                                    <Avatar className='w-10 h-10'>
-                                        {session?.user?.image && <AvatarImage src={session.user?.image} />}
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                    <div className='text-sm'>
-                                        <div className='font-semibold text-primary mb-0.5'>{session.user?.name}</div>
-                                        <div className='text-primary/70'>@{session.user?.username}</div>
-                                    </div>
+                    <div ref={expandedProfileDetailRef} className={`${openProfileDetail && 'bg-primary/5 px-2.5 py-2 rounded-lg border'} transition-all`}>
+                        <div onClick={() => setOpenProfileDetail(!openProfileDetail)} className='select-none flex items-center justify-between cursor-pointer p-2 rounded-lg active:scale-95 hover:bg-primary/5 transition-all border border-transparent hover:border-border'>
+                            <div className='flex items-center gap-2'>
+                                <Avatar className='w-10 h-10'>
+                                    {session?.user?.image && <AvatarImage src={session.user?.image} className='object-cover' />}
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
+                                <div className='text-sm'>
+                                    <div className='font-semibold text-primary mb-0.5'>{session.user?.name}</div>
+                                    <div className='text-primary/70'>@{session.user?.username}</div>
                                 </div>
-                                <DotsThreeVertical size={20} className='opacity-30' weight='bold' />
                             </div>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className='w-[258px]'>
-                            <DropdownMenuItem >
-                                <User size={16} className='mr-2' />
-                                <span>Profile</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/auth/login' })}>
-                                <SignOut size={16} className='mr-2' />
-                                <span>Logout</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                            <DotsThreeVertical size={20} className='opacity-30' weight='bold' />
+                        </div>
+                        <div className={`flex flex-col gap-0.5 overflow-hidden border-t mt-2 pt-2 transition-all duration-500 ${openProfileDetail ? 'max-h-96' : 'h-fit -mb-6 max-h-0 opacity-0'}`}>
+                            {userProfileDetailNavs.map((val, i) => (
+                                <Link key={i} href={val.route(session.user.username)} onClick={() => setOpenProfileDetail(false)} className='flex items-center gap-2 text-primary text-sm hover:bg-primary/5 px-2.5 py-2 rounded-md transition-all'>
+                                    <span>{val.icon}</span>
+                                    <span className='leading-4'>{val.title}</span>
+                                </Link>
+                            ))}
+                            <div onClick={() => signOut({ callbackUrl: '/auth/login' })} className='flex items-center gap-2 text-primary text-sm hover:bg-primary/5 px-2.5 py-2 rounded-md transition-all cursor-pointer'>
+                                <span><SignOut size={18} /></span>
+                                <span className='leading-4'>Logout</span>
+                            </div>
+                        </div>
+                    </div>
                     :
                     <div className='w-[90%] mx-auto text-center flex items-center gap-2'>
                         <Link href={'/auth/login'}

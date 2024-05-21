@@ -11,7 +11,7 @@ interface Props {
     reviewsNum?: string;
     category?: string;
     description?: string;
-    upvotesNum?: string;
+    upvotesNum?: number;
     owner: string;
     title: string;
     link: string;
